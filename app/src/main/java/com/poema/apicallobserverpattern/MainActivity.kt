@@ -9,12 +9,10 @@ import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
-    var myString = ""
-
     var theString : String by Delegates.observable("this is the string value before it has been set from the api, "){
             property, oldValue, newValue ->
         runOnUiThread {
-            displayOldValueToo(oldValue)
+            displayValues(oldValue,newValue)
         }
     }
 
@@ -24,8 +22,9 @@ class MainActivity : AppCompatActivity() {
         getDataFromGoogle()
 
     }
-    private fun displayOldValueToo(oldValue: String) {
+    private fun displayValues(oldValue: String,newValue: String) {
         text_view1.text = oldValue
+        textView2.text =  newValue          //theString
     }
 
     fun getDataFromGoogle() {
@@ -37,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         val stringRequest = StringRequest(Request.Method.GET, url,
             { response ->
                 theString = "..and this is the string after the observable has set it to: ${response.substring(0, 200)}"
-                textView2.text = theString
             },
             { error -> text_view1.text = "That didn't work! Error: ${error.message}" })
 
